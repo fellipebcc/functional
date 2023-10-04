@@ -135,7 +135,7 @@ public class UserAssembler {
                 User.builder()
                         .firstName("Mercedes")
                         .lastName("Burgess")
-                        .gender(Gender.FEMALE)
+                        .gender(Gender.PREFER_NOT_SAY)
                         .birthdate(LocalDateTime.of(1990, 11, 28, 0, 0, 0))
                         .address(Address.builder()
                                 .streetName("Kristopher Shores")
