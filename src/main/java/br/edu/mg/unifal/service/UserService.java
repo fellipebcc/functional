@@ -9,11 +9,23 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.*;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 public class UserService {
+
+    /**
+     *
+     * Predicate → boolean fun(T t);
+     * Consumer → void fun(T t);
+     * Supplier → T fun();
+     * Function → T fun(U u);
+     *
+     */
 
     /*
      *  PREDICATE
@@ -32,9 +44,14 @@ public class UserService {
 
     // Using Predicate (Java 8)
     public Predicate<User> isMale8 = user -> Gender.MALE.equals(user.getGender());
+
+    public Function<User, Boolean> isMaleUsingFunction = user ->
+            Gender.MALE.equals(user.getGender());
     public Predicate<User> isPreferNotSay8 = user -> Gender.PREFER_NOT_SAY.equals(user.getGender());
     public BiPredicate<User, Gender> isSameGender8 = (user, gender) ->
             gender.equals(user.getGender());
+
+    public Predicate<User> isFemale = user -> Gender.FEMALE.equals(user.getGender());
 
     /* ------------------------------------ ## ------------------------------------ */
 
@@ -106,6 +123,8 @@ public class UserService {
         return Period.between(secondDate, firstDate).getYears();
     };
 
+    public Function<Integer, Integer> calculateDouble8 = value -> value * 2;
+
     /* ------------------------------------ ## ------------------------------------ */
 
     /*
@@ -118,11 +137,11 @@ public class UserService {
      *      Performs an action for each element of this stream.
      *
      *  filter:
-     *      filter(Predicate<? super T> predicate)
+     *      T filter(Predicate<? super T> predicate)
      *      Returns a stream consisting of the elements of this stream that match the given predicate.
      *
      *  map:
-     *      map(Function<? super T,? extends R> mapper)
+     *      T map(Function<? super T,? extends R> mapper)
      *      Returns a stream consisting of the results of applying the given function to the elements of this stream.
      *
      * Example: Implement three methods that:
@@ -132,8 +151,77 @@ public class UserService {
      */
 
     // Using traditional Java
+    public void printUser(List<User> users) {
+//        for (User user : users) {
+//            System.out.println(user.toString());
+//        }
+//        for (int i = 0; i < users.size(); i++) {
+//            System.out.println(users.get(i).toString());
+//        }
+        users.stream().forEach(printUser8);
+    }
+
+    public List<User> onlyFemaleUsers(List<User> users) {
+//        List<User> femaleUsers = new ArrayList<>();
+//        for (User user : users) {
+//            if (user.getGender().equals(Gender.FEMALE)) {
+//                femaleUsers.add(user);
+//            }
+//        }
+//        return femaleUsers;
+        return users.stream().filter(isFemale).collect(Collectors.toList());
+    }
+
+    public List<Integer> createAgeList(List<User> users) {
+//        List<Integer> ages = new ArrayList<>();
+//        for (User user : users) {
+//            ages.add(
+//                    Period.between(user.getBirthdate().toLocalDate(), LocalDate.now())
+//                            .getYears()
+//            );
+//        }
+//        return ages;
+        return users.stream().map(user -> Period.between(user.getBirthdate().toLocalDate(), LocalDate.now())
+                .getYears()).collect(Collectors.toList());
+    }
 
     // Using Stream (Java 8)
+
+    public void printAllAges(List<User> users) {
+        // Printem no console (terminal) a idade de todos os usuários
+        // do sexo masculino com idade superior a 30 anos
+
+        // Opção A
+//        users.stream().filter(isMale8)
+//                .map(user -> Period.between(user.getBirthdate().toLocalDate(), LocalDate.now())
+//                        .getYears())
+//                .filter(age -> age > 30)
+//                .forEach(age -> System.out.println(age));
+
+        // Opção B
+        users.stream().filter(user ->
+                user.getGender().equals(Gender.MALE)
+                && Period.between(user.getBirthdate().toLocalDate(), LocalDate.now()).getYears() > 30
+        ).forEach(user ->
+                System.out.println(
+                        Period.between(user.getBirthdate().toLocalDate(), LocalDate.now())
+                                .getYears())
+        );
+
+    }
+
+    public void testMatch(List<User> users) {
+        boolean testAnymatch =
+                users.stream().anyMatch(user ->
+                        Gender.PREFER_NOT_SAY.equals(user.getGender()));
+        boolean allLegal =
+                users.stream().allMatch(user ->
+                        Period.between(
+                                user.getBirthdate().toLocalDate(), LocalDate.now()).getYears() >= 18
+                );
+        System.out.println("Exist 'PREFER NOT SAY' on database: " + testAnymatch);
+        System.out.println("All users are legal? " + allLegal);
+    }
 
 
     /* ------------------------------------ ## ------------------------------------ */

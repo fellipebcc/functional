@@ -24,11 +24,18 @@ public class Main {
 //        System.out.println(service.getUUID().toString());
 //        System.out.println(service.getCurrentDate8.get());
 //        System.out.println(service.calculateAge(UserAssembler.assemble().get(10)));
-//        System.out.println(service.calculateAge8.apply(UserAssembler.assemble().get(9)));
-        System.out.println(service.calculateYearsBetweenDates
-                .apply(LocalDate.now(), LocalDate.now().minusYears(25)));
-        System.out.println(service.calculateYearsBetweenDates
-                .apply(LocalDate.now().minusYears(25), LocalDate.now()));
+//        System.out.println(service.calculateAge8
+//                        .andThen(service.calculateDouble8)
+//                .apply(UserAssembler.assemble().get(9)));
+//        System.out.println(service.calculateYearsBetweenDates
+//                .apply(LocalDate.now(), LocalDate.now().minusYears(25)));
+//        System.out.println(service.calculateYearsBetweenDates
+//                .apply(LocalDate.now().minusYears(25), LocalDate.now()));
+//        service.printUser(UserAssembler.assemble());
+//        service.printUser(service.onlyFemaleUsers(UserAssembler.assemble()));
+//        service.createAgeList(UserAssembler.assemble());
+//        service.printAllAges(UserAssembler.assemble());
+        service.testMatch(UserAssembler.assemble());
     }
 
 }
